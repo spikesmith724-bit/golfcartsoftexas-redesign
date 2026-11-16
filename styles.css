@@ -148,3 +148,30 @@ a.card:hover{transform:translateY(-3px);box-shadow:var(--shadow);color:var(--tex
 .finance-band p{max-width:640px}
 .finance-band .eyebrow{color:var(--lime)}
 .finance-band .btn-ghost{margin:0}
+
+/* model cards + detail pages */
+a.model{text-decoration:none;color:inherit;display:block;transition:.18s}
+a.model:hover{color:inherit;transform:translateY(-3px);box-shadow:var(--shadow)}
+a.model .more{display:inline-block;margin-top:4px;font-weight:700;color:var(--lime-d);font-size:.92rem}
+.model-specs{list-style:none;padding:0;margin:4px 0 10px;color:var(--muted);font-size:.9rem;line-height:1.4;text-align:left}
+.model-specs li{margin:0 0 3px}
+.crumb{font-size:.9rem;color:var(--muted);margin:0 0 22px}
+.crumb a{text-decoration:none;font-weight:600}
+.detail-top{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:start;margin-bottom:40px}
+@media(max-width:880px){.detail-top{grid-template-columns:1fr;gap:24px}}
+.detail-photo{background:#eef0ec;border-radius:var(--r);border:1px solid var(--line);overflow:hidden;padding:18px}
+.detail-photo img{width:100%;height:auto;object-fit:contain}
+.detail-intro h1{margin-bottom:.3em}
+.detail-ctas{display:flex;flex-wrap:wrap;gap:12px;margin:22px 0 16px}
+.spec-table{width:100%;border-collapse:collapse;margin:0 0 22px;background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.spec-table th,.spec-table td{padding:10px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line);font-size:.96rem}
+.spec-table tr:last-child th,.spec-table tr:last-child td{border-bottom:0}
+.spec-table th{width:32%;max-width:240px;color:var(--ink);font-weight:600;background:var(--alt)}
+@media(max-width:600px){.spec-table th{width:40%}.spec-table th,.spec-table td{padding:9px 10px;font-size:.92rem}}
+.spec-source{color:var(--muted);font-size:.9rem;margin:0 0 28px}
+.feature-block{margin:0 0 28px}
+.feature-list{margin:0;padding-left:1.15em}
+.feature-list li{margin:0 0 .45em}
+.detail-install{color:var(--text);margin:0}
+.detail-specs h2,.detail-specs h3{margin-top:8px}
+.model-detail .chips{margin:0 0 16px}
