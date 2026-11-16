@@ -109,3 +109,22 @@ a.card:hover{transform:translateY(-3px);box-shadow:var(--shadow);color:var(--tex
 @media(max-width:760px){.cap-grid{grid-template-columns:1fr}.capsheet{padding:22px}}
 @media print{.cap-grid{grid-template-columns:1.7fr 1fr!important;gap:20px!important}.capsheet{font-size:9.6pt!important;padding:0!important}.capsheet h2{font-size:12pt!important;margin:10px 0 6px!important}.cap-head h1{font-size:24pt!important}.topbar,.site-header,.cta-band,.site-footer,.cap-actions,.page-hero{display:none!important}.sec{padding:0}.wrap{max-width:none;padding:0}.capsheet{border:0;box-shadow:none;max-width:none;padding:0}@page{size:letter;margin:.4in}
 .capsheet h2,.cap-side,.cap-head{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+
+/* brand lineup */
+.brand-block{margin:48px 0 0}
+.brand-block:first-of-type{margin-top:0}
+.brand-head{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:0 0 18px;padding-bottom:12px;border-bottom:3px solid var(--lime)}
+.brand-head img{height:44px;width:auto;max-width:240px;object-fit:contain;object-position:left center}
+.brand-head h2{margin:0}
+.brand-note{color:var(--muted);margin:0 0 16px;font-size:.95rem}
+.model-grid.three{grid-template-columns:repeat(3,1fr)}
+@media(max-width:980px){.model-grid.three{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.model-grid.three{grid-template-columns:1fr}}
+.model-img.studio{background:#eef0ec}
+.model.text-only{display:flex;flex-direction:column;justify-content:space-between;min-height:160px}
+.home-brands{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:900px){.home-brands{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){.home-brands{grid-template-columns:repeat(2,1fr)}}
+.home-brands a{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 14px;display:flex;align-items:center;justify-content:center;min-height:92px;text-decoration:none}
+.home-brands a:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+.home-brands img{max-height:46px;max-width:100%;width:auto;object-fit:contain}
