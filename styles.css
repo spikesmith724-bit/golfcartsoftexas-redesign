@@ -128,3 +128,7 @@ a.card:hover{transform:translateY(-3px);box-shadow:var(--shadow);color:var(--tex
 .home-brands a{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 14px;display:flex;align-items:center;justify-content:center;min-height:92px;text-decoration:none}
 .home-brands a:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
 .home-brands img{max-height:46px;max-width:100%;width:auto;object-fit:contain}
+.model-official{display:block;font-size:.82rem;color:var(--muted);margin:0 0 10px;text-decoration:none}
+.model-official:hover{color:var(--lime-d)}
+.model-img a{display:flex;align-items:center;justify-content:center;width:100%;height:100%}
+.model-img a img{max-height:100%;width:100%;object-fit:contain}
