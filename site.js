@@ -17,4 +17,51 @@ var f=document.getElementById('contactForm');
 if(f){var q=new URLSearchParams(location.search).get('interest');if(q)document.getElementById('interest').value=q;
 f.addEventListener('submit',function(e){e.preventDefault();var d=new FormData(f);var body='Name: '+d.get('name')+'\nPhone: '+d.get('phone')+'\nEmail: '+d.get('email')+'\nInterested in: '+d.get('interest')+'\n\n'+d.get('message');
 location.href='mailto:'+f.dataset.to+'?subject='+encodeURIComponent('Website inquiry: '+(d.get('interest')||'General'))+'&body='+encodeURIComponent(body)})}
+
+// Official color swatch picker on model detail pages
+document.querySelectorAll("[data-color-picker]").forEach(function(picker){
+  var img=picker.querySelector(".detail-photo img");
+  var label=picker.querySelector(".color-current");
+  var noteEl=picker.querySelector(".color-photo-note");
+  var btns=[].slice.call(picker.querySelectorAll(".swatch-btn"));
+  var fallback=picker.getAttribute("data-fallback")||"";
+  if(!img||!btns.length)return;
+  function select(btn, fromKey){
+    var name=btn.getAttribute("data-name")||"";
+    var src=btn.getAttribute("data-src")||fallback;
+    var note=btn.getAttribute("data-note")||"";
+    btns.forEach(function(b){
+      var on=b===btn;
+      b.classList.toggle("is-selected",on);
+      b.setAttribute("aria-selected",on?"true":"false");
+      b.tabIndex=on?0:-1;
+    });
+    if(src)img.src=src;
+    if(name){
+      img.alt=img.alt.replace(/\s+in\s+.+$/,"")+" in "+name;
+      if(label)label.textContent="Color: "+name;
+    }
+    if(noteEl){
+      noteEl.textContent=note;
+      noteEl.classList.toggle("is-hidden",!note);
+    }
+    if(fromKey)btn.focus();
+  }
+  btns.forEach(function(btn){
+    btn.addEventListener("click",function(){select(btn,false)});
+  });
+  picker.querySelector(".swatch-list").addEventListener("keydown",function(e){
+    var i=btns.indexOf(document.activeElement);
+    if(i<0)i=btns.findIndex(function(b){return b.classList.contains("is-selected")});
+    if(i<0)i=0;
+    var n=-1;
+    if(e.key==="ArrowRight"||e.key==="ArrowDown")n=(i+1)%btns.length;
+    else if(e.key==="ArrowLeft"||e.key==="ArrowUp")n=(i-1+btns.length)%btns.length;
+    else if(e.key==="Home")n=0;
+    else if(e.key==="End")n=btns.length-1;
+    if(n<0)return;
+    e.preventDefault();
+    select(btns[n],true);
+  });
+});
 })();
