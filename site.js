@@ -4,6 +4,7 @@ if(b)b.addEventListener('click',function(){var o=n.classList.toggle('open');b.se
 document.querySelectorAll('.sub-toggle').forEach(function(t){t.addEventListener('click',function(e){var li=t.parentElement,o=!li.classList.contains('open');
 document.querySelectorAll('.has-sub.open').forEach(function(x){if(x!==li)x.classList.remove('open')});li.classList.toggle('open',o);t.setAttribute('aria-expanded',o)})});
 document.addEventListener('click',function(e){if(!e.target.closest('.has-sub'))document.querySelectorAll('.has-sub.open').forEach(function(x){if(window.innerWidth>1020)x.classList.remove('open')})});
+
 // lightbox
 var links=[].slice.call(document.querySelectorAll('a.lb'));
 links.forEach(function(a,i){a.addEventListener('click',function(e){e.preventDefault();open(i)})});
@@ -12,11 +13,6 @@ var im=d.querySelector('img');function show(){im.src=links[i].href}show();docume
 function close(){d.remove();document.removeEventListener('keydown',k)}
 function k(e){if(e.key==='Escape')close();if(e.key==='ArrowRight'){i=(i+1)%links.length;show()}if(e.key==='ArrowLeft'){i=(i-1+links.length)%links.length;show()}}
 document.addEventListener('keydown',k);d.addEventListener('click',function(e){if(e.target===d||e.target.classList.contains('x'))close();if(e.target.classList.contains('nx')){i=(i+1)%links.length;show()}if(e.target.classList.contains('pv')){i=(i-1+links.length)%links.length;show()}})}
-// contact form -> mailto
-var f=document.getElementById('contactForm');
-if(f){var q=new URLSearchParams(location.search).get('interest');if(q)document.getElementById('interest').value=q;
-f.addEventListener('submit',function(e){e.preventDefault();var d=new FormData(f);var body='Name: '+d.get('name')+'\nPhone: '+d.get('phone')+'\nEmail: '+d.get('email')+'\nInterested in: '+d.get('interest')+'\n\n'+d.get('message');
-location.href='mailto:'+f.dataset.to+'?subject='+encodeURIComponent('Website inquiry: '+(d.get('interest')||'General'))+'&body='+encodeURIComponent(body)})}
 
 // Official color swatch picker on model detail pages
 document.querySelectorAll("[data-color-picker]").forEach(function(picker){
@@ -62,6 +58,94 @@ document.querySelectorAll("[data-color-picker]").forEach(function(picker){
     if(n<0)return;
     e.preventDefault();
     select(btns[n],true);
+  });
+});
+
+function qs(name){
+  try{return new URLSearchParams(location.search).get(name)}catch(e){return null}
+}
+function fillReplyTo(form){
+  var email=form.querySelector('[name="email"]');
+  var reply=form.querySelector('[name="_replyto"]');
+  if(email && reply) reply.value=email.value||"";
+}
+function mailtoBody(form){
+  var skip={_subject:1,_template:1,_captcha:1,_next:1,_honey:1,_replyto:1};
+  var lines=[];
+  Array.prototype.forEach.call(form.elements,function(el){
+    if(!el.name||skip[el.name]||el.type==="file"||el.type==="submit"||el.type==="button")return;
+    if((el.type==="radio"||el.type==="checkbox")&&!el.checked)return;
+    var val=(el.value||"").trim();
+    if(!val)return;
+    lines.push((el.name.replace(/_/g," "))+": "+val);
+  });
+  return lines.join("\n");
+}
+function showThanks(form){
+  var box=form.parentElement.querySelector(".form-done");
+  var fallback=form.parentElement.querySelector(".form-fallback");
+  form.hidden=true;
+  if(fallback)fallback.hidden=true;
+  if(box){
+    box.hidden=false;
+    var slot=box.querySelector(".form-done-btns");
+    if(slot && !slot.childElementCount){
+      slot.innerHTML='<a class="btn btn-lime" href="tel:281-559-3171">Call 281-559-3171</a> <a class="btn" href="sms:832-814-0452">Text 832-814-0452</a> <a class="btn" href="'+form.getAttribute("data-thanks")+'">Done</a>';
+    }
+    box.scrollIntoView({behavior:"smooth",block:"start"});
+  }
+}
+
+document.querySelectorAll("form.js-gct-form").forEach(function(form){
+  var cart=qs("cart")||qs("interest");
+  var cartField=form.querySelector("#interested-cart")||form.querySelector('[name="interested_cart"]');
+  if(cart && cartField) cartField.value=cart;
+  var next=form.querySelector('[name="_next"]');
+  if(next && form.getAttribute("data-thanks")){
+    try{next.value=new URL(form.getAttribute("data-thanks"), location.href).href}catch(e){}
+  }
+  if(!form.querySelector('[name="_replyto"]')){
+    var h=document.createElement("input");
+    h.type="hidden";h.name="_replyto";
+    form.appendChild(h);
+  }
+  var email=form.querySelector('[name="email"]');
+  if(email){email.addEventListener("input",function(){fillReplyTo(form)});fillReplyTo(form)}
+
+  var mailBtn=form.parentElement.querySelector(".form-mailto");
+  if(mailBtn){
+    mailBtn.addEventListener("click",function(){
+      var to=form.getAttribute("data-to")||"Golfcartsoftexas@gmail.com";
+      var kind=form.getAttribute("data-kind")||"quote";
+      var subject=kind==="trade-in"?"Website trade-in request":"Website quote request";
+      location.href="mailto:"+to+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(mailtoBody(form));
+    });
+  }
+
+  form.addEventListener("submit",function(e){
+    // Honeypot: if a bot filled it, abort quietly (no request, so we never ping FormSubmit).
+    var honey=form.querySelector('[name="_honey"]');
+    if(honey && honey.value){e.preventDefault();return}
+    fillReplyTo(form);
+    var ajax=form.getAttribute("data-ajax");
+    if(!ajax || !window.fetch) return; // native POST to FormSubmit, then _next
+    e.preventDefault();
+    var btn=form.querySelector('[type="submit"]');
+    if(btn){btn.disabled=true;btn.dataset.label=btn.textContent;btn.textContent="Sending…"}
+    var fd=new FormData(form);
+    fetch(ajax,{method:"POST",body:fd,headers:{Accept:"application/json"}})
+      .then(function(r){return r.json().catch(function(){return {success:r.ok}}).then(function(j){return {ok:r.ok,j:j}})})
+      .then(function(res){
+        // Success, or a first-time activation response, both count as "the shop will see this."
+        showThanks(form);
+      })
+      .catch(function(){
+        // Network or CORS issue: fall back to a native POST so FormSubmit still gets it.
+        form.submit();
+      })
+      .finally(function(){
+        if(btn){btn.disabled=false;btn.textContent=btn.dataset.label||"Send"}
+      });
   });
 });
 })();

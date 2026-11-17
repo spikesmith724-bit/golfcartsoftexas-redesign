@@ -240,7 +240,7 @@
           badgeRow +
           '<p class="inv-price">' + money(row.Price) + "</p>" +
           '<div class="inv-actions">' +
-            '<a class="btn btn-red btn-sm" href="' + esc(prefix) + "contact-us/?interest=" + interest + '">Get a Quote</a>' +
+            '<a class="btn btn-red btn-sm" href="' + esc(prefix) + "get-a-quote/?cart=" + interest + '">Get a Quote</a>' +
             '<a class="btn btn-sm" href="' + OCTANE + '" target="_blank" rel="noopener">Finance</a>' +
             '<a class="btn btn-lime btn-sm" href="tel:' + phone + '">Call</a>' +
           "</div>" +
