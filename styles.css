@@ -251,3 +251,32 @@ a.model .more{display:inline-block;margin-top:4px;font-weight:700;color:var(--li
   .inv-body h3{font-size:1.3rem}
   .inv-price{font-size:1.8rem}
 }
+
+/* City landing pages + areas we serve */
+.area-links{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.area-more{margin:12px 0 0;font-size:.88rem}
+.city-layout{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:start}
+.city-copy p:last-child{margin-bottom:0}
+.city-shop{background:var(--ink);color:#dfe5ea;border-radius:var(--r);padding:28px 26px}
+.city-shop h2{color:#fff;margin-bottom:.35em}
+.city-shop .eyebrow{color:var(--lime)}
+.city-shop a:not(.btn){color:var(--lime)}
+.city-shop .btn{background:var(--lime);border-color:var(--lime);color:var(--ink);margin-top:8px}
+.city-shop .btn:hover{background:#8fd455;color:var(--ink)}
+.city-shop .muted{color:#aeb8c1}
+.city-aside-photo{margin-top:18px}
+.city-ctas-panel{background:var(--alt);border:1px solid var(--line);border-radius:var(--r);padding:28px 26px}
+.city-ctas-panel h2{margin-bottom:.35em}
+.city-ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.faq-list{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.faq-list details{background:#fff;border:1px solid var(--line);border-radius:12px;padding:4px 16px}
+.faq-list summary{cursor:pointer;font-weight:700;padding:12px 0;color:var(--ink);list-style:none}
+.faq-list summary::-webkit-details-marker{display:none}
+.faq-list summary::after{content:"+";float:right;color:var(--lime-d);font-weight:800}
+.faq-list details[open] summary::after{content:"–"}
+.faq-list details p{margin:0 0 14px;color:var(--text)}
+@media(max-width:880px){
+  .city-layout{display:flex;flex-direction:column;gap:28px}
+  .city-aside{order:-1}
+  .area-links{grid-template-columns:1fr}
+}
