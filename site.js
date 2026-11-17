@@ -148,4 +148,30 @@ document.querySelectorAll("form.js-gct-form").forEach(function(form){
       });
   });
 });
+
+
+// Facebook embeds are often blank in locked-down or headless browsers.
+// Leave a poster + "Watch on Facebook" link behind the iframe; promote it if the iframe never paints.
+document.querySelectorAll(".fb-video").forEach(function(card){
+  var frame = card.querySelector(".fb-video-frame");
+  var iframe = card.querySelector("iframe");
+  if(!frame || !iframe) return;
+  var done = false;
+  function showFallback(){
+    if(done) return;
+    done = true;
+    card.classList.add("is-fallback");
+  }
+  // If the iframe errors, or stays at 0x0 / never loads, show the poster.
+  iframe.addEventListener("error", showFallback);
+  setTimeout(function(){
+    try{
+      // Cross-origin: we cannot read the Facebook document. If the iframe
+      // element itself has no layout box, treat it as blocked.
+      var r = iframe.getBoundingClientRect();
+      if(r.width < 2 || r.height < 2) showFallback();
+    }catch(e){ showFallback(); }
+  }, 4000);
+});
+
 })();
